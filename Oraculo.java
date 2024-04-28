@@ -1,57 +1,86 @@
-package com.mycompany.atividade02;
+package org.example;
 
 import java.util.Random;
 
 public class Oraculo {
+    private String nome_oraculo;  // Nome do Oráculo
+    private final Random random = new Random();  // Para sorteios
 
-    Guerreiro warrior;
-    String nome;
-    boolean loadLevel01, loadLevel02, decidirVidaExtra;
-
-    public void warrior (Guerreiro warrior) {
-        this.warrior = warrior;
+    public Oraculo(String nome) {
+        this.nome_oraculo = nome;  // Define o nome do Oráculo ao instanciar
     }
 
     public void definirNome(String nome) {
-        this.nome = nome;
-        InOut.leString(nome);
-    }
-
-    public String prologoIntroducao(int vidas) {
-        return "Eu sou " + nome + ". Guerreiro, você começa com " + vidas + " vidas.";
-    }
-
-    public String prologoVencedor() {
-        return "Parabéns, " + warrior.getNome() + "! Você é o vencedor!";
-    }
-
-    public String prologoPerdedor() {
-        return "Desculpe, " + warrior.getNome() + ". Você perdeu.";
-    }
-
-    public boolean loadLevel01(int palpite) {
-        Random rand = new Random();
-        int segredo = rand.nextInt(100) + 1;
-        return segredo == palpite;
-    }
-
-    public boolean loadLevel02(boolean opcaoPar) {
-        Random rand = new Random();
-        int oraculo = rand.nextInt(6);
-        int guerreiro = rand.nextInt(6);
-        int soma = oraculo + guerreiro;
-
-        return (soma % 2 == 0) == opcaoPar;
-    }
-
-    public boolean decidirVidaExtra(String pedido) {
-        String[] palavras = pedido.split(" ");
-        return palavras.length > 5;
+        this.nome_oraculo = nome;  // Permite redefinir o nome do Oráculo
     }
 
     public int sortearVidas() {
-        Random rand = new Random();
-        return rand.nextInt(4) + 9;
+        return 9 + random.nextInt(4);  // Retorna um número entre 9 e 12
     }
 
+    public String prologoIntroducao(Guerreiro guerreiro) {
+        return "Oráculo " + nome_oraculo + ":\n" +
+                "\nGuerreiro " + guerreiro.getNome_guerreiro() + ", você terá " +
+                guerreiro.getQtdVidas() + " vidas para enfrentar os desafios.\n" +
+                "Prepare-se para a aventura!";
+    }
+
+    public boolean loadLevel1(Guerreiro guerreiro) {
+        int numeroSorteado = 1 + random.nextInt(100);  // Sorteia um número entre 1 e 100
+        int palpiteGuerreiro;
+        boolean acertou = false;
+
+        do {
+            palpiteGuerreiro = InOut.leInt("Guerreiro " + guerreiro.getNome_guerreiro() + ", faça um palpite entre 1 e 100: ");
+
+            if (palpiteGuerreiro < numeroSorteado) {
+                InOut.MsgDeAviso("Dica", "O segredo é MAIOR que o seu palpite.");
+            } else if (palpiteGuerreiro > numeroSorteado) {
+                InOut.MsgDeAviso("Dica", "O segredo é MENOR que o seu palpite.");
+            } else {
+                InOut.MsgDeInformacao("Parabéns", "Parabéns, Guerreiro " + guerreiro.getNome_guerreiro() + "! Você acertou!");
+                acertou = true;
+            }
+
+            guerreiro.perderVida();  // Cada erro perde uma vida
+            InOut.MsgDeAviso("Vidas", "Você perdeu uma vida! Restam " + guerreiro.getQtdVidas() + " vidas.");
+
+        } while (!acertou && guerreiro.getQtdVidas() > 0);  // Continua até acertar ou acabar as vidas
+
+        return acertou;  // Retorna se o Guerreiro ganhou ou perdeu
+    }
+
+    public boolean loadLevel2(Guerreiro guerreiro) {
+        String escolha = InOut.leString("Guerreiro " + guerreiro.getNome_guerreiro() + ", escolha PAR ou ÍMPAR: ").toUpperCase();
+
+        int numeroGuerreiro = random.nextInt(6);  // Número entre 0 e 5
+        int numeroOraculo = random.nextInt(6);  // Número entre 0 e 5
+        int soma = numeroGuerreiro + numeroOraculo;  // Soma dos números
+
+        boolean ehPar = (soma % 2 == 0);  // Verifica se é par ou ímpar
+
+        boolean guerreiroGanhou = (escolha.equals("PAR") && ehPar) || (escolha.equals("ÍMPAR") && !ehPar);  // Verifica se o Guerreiro ganhou
+
+        if (guerreiroGanhou) {
+            InOut.MsgDeInformacao("Resultado", "Você ganhou! A soma foi " + soma + ", que é " + (ehPar ? "PAR" : "ÍMPAR"));
+        } else {
+            InOut.MsgDeInformacao("Resultado", "Você perdeu! A soma foi " + soma + ", que é " + (ehPar ? "PAR" : "ÍMPAR"));
+        }
+
+        return guerreiroGanhou;  // Retorna se o Guerreiro ganhou ou perdeu
+    }
+
+    public String prologoVencedor() {
+        return "Parabéns, Guerreiro! Você venceu o jogo!";
+    }
+
+    public String prologoPerdedor() {
+        return "Infelizmente, Guerreiro, você perdeu o jogo. Tente novamente!";
+    }
+
+    public boolean decidirVidaExtra(String pedido) {
+        String[] palavras = pedido.split("\\s+");  // Dividido por espaços
+
+        return palavras.length > 5;  // Concede vida extra se o pedido tiver mais que cinco palavras
+    }
 }
