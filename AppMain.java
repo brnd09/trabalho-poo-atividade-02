@@ -1,5 +1,3 @@
-package org.example;
-
 public class Main {
     public static void main(String[] args) {
         // Entrada dos nomes do Oráculo e do Guerreiro
