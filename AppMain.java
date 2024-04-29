@@ -15,7 +15,24 @@ public class Main {
         InOut.MsgDeInformacao("Introdução", oraculoMaster.prologoIntroducao(guerreiro));
 
         // Joga a primeira partida (level 1)
-        boolean resultadoPartida1 = oraculoMaster.loadLevel1(guerreiro);
+      boolean resultadoPartida1 = oraculoMaster.loadLevel1(guerreiro);
+
+      // Estado do Guerreiro após a primeira partida
+      InOut.MsgDeInformacao("Estado do Guerreiro após a primeira partida",
+          "Nome: " + guerreiro.getNome_guerreiro() + "\nVidas: " + guerreiro.getQtdVidas());
+
+      // Se o Guerreiro perdeu todas as vidas na primeira partida
+      if (!resultadoPartida1 && guerreiro.getQtdVidas() <= 0) {
+          String pedidoMisericordia = guerreiro.pedirVidaExtra();
+          boolean vidaExtraConcedida = oraculoMaster.decidirVidaExtra(pedidoMisericordia);
+
+          if (vidaExtraConcedida) {
+              guerreiro.ganharVida(); // Concede uma vida extra
+              InOut.MsgDeInformacao("Vida Extra", "Oráculo concedeu uma vida extra. Você tem " + guerreiro.getQtdVidas() + " vidas.");
+          } else {
+              InOut.MsgDeInformacao("Vida Extra", "Oráculo negou a vida extra. Você perdeu o jogo.");
+          }
+      }
 
         // Estado do Guerreiro após a primeira partida
         InOut.MsgDeInformacao("Estado do Guerreiro após a primeira partida",
