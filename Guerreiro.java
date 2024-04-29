@@ -1,37 +1,34 @@
 public class Guerreiro {
-    private String nome_guerreiro;  // Nome do Guerreiro
-    private int qtdVidas;  // Quantidade de vidas
+    private String nome_guerreiro;
+    private int qtdVidas;
 
     public Guerreiro(String nome) {
-        this.nome_guerreiro = nome;  // Define o nome do Guerreiro
-        this.qtdVidas = 0;  // Inicializa as vidas
-    }
-
-    public void definirNome(String nome) {
-        this.nome_guerreiro = nome;  // Permite redefinir o nome
+        this.nome_guerreiro = nome;
+        this.qtdVidas = 0;
     }
 
     public void ganharVida() {
-        this.qtdVidas++;  // Guerreiro ganha uma vida
+        this.qtdVidas++;
     }
 
     public void perderVida() {
-        this.qtdVidas--;  // Guerreiro perde uma vida
+        this.qtdVidas--;
     }
 
     public String getNome_guerreiro() {
-        return nome_guerreiro;  // Retorna o nome do Guerreiro
+        return nome_guerreiro;
     }
 
     public int getQtdVidas() {
-        return qtdVidas;  // Retorna a quantidade de vidas
+        return qtdVidas;
     }
 
     public void setQtdVidas(int qtdVidas) {
-        this.qtdVidas = qtdVidas;  // Permite definir a quantidade de vidas
+        this.qtdVidas = qtdVidas;
     }
 
-    public String vidaExtra() {
-        return InOut.leString("Guerreiro " + nome_guerreiro + ", faça um pedido de misericórdia por uma vida extra: ");
+    // Defina o método para pedir uma vida extra
+    public String pedirVidaExtra() {
+        return InOut.leString("Guerreiro " + nome_guerreiro + ", faça um pedido por uma vida extra: ");
     }
 }
