@@ -1,5 +1,3 @@
-package org.example;
-
 public class Guerreiro {
     private String nome_guerreiro;  // Nome do Guerreiro
     private int qtdVidas;  // Quantidade de vidas
